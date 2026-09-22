@@ -1,4 +1,4 @@
-# check_db.py
+# Sanity check row counts
 import psycopg2
 
 conn = psycopg2.connect(
@@ -8,11 +8,21 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
+# Show timezone
+cur.execute("SHOW timezone")
+print(f"session timezon: {cur.fetchone()[0]}")
+
+cur.execute("SELECT NOW(), NOW() AT TIME ZONE 'Europe/Stockholm'")
+now_utc, now_local = cur.fetchone()
+print(f"NOW()               : {now_utc}")
+print(f"NOW() in Stockholm  : {now_local}")
+
 cur.execute("SELECT COUNT(*) FROM policy WHERE NOT is_deleted")
-print(f"active policy count: {cur.fetchone()}[0]")
+print(f"active policy count: {cur.fetchone()[0]}")
 
 cur.execute("SELECT COUNT(*) FROM claims WHERE NOT is_deleted")
-print(f"active claims count: {cur.fetchone()}[0]")
+print(f"active claims count: {cur.fetchone()[0]}")
+
 
 #cur.execute("""
 #    SELECT table_name FROM information_schema.tables
@@ -27,10 +37,10 @@ print(f"active claims count: {cur.fetchone()}[0]")
 #cur.execute("SELECT COUNT(*) FROM claims;")
 #print("claims rows:", cur.fetchone()[0])
 
-#cur.execute("SELECT * FROM policy ORDER BY policy_id LIMIT 5;")
-#print("First 5 policies:")
-#for row in cur.fetchall():
-#    print("  ", row)
+cur.execute("SELECT * FROM policy ORDER BY policy_id LIMIT 5;")
+print("First 5 policies:")
+for row in cur.fetchall():
+    print("  ", row)
 
 #cur.execute("SELECT * FROM claims ORDER BY policy_id LIMIT 5;")
 #print("First 5 claims:")
@@ -38,5 +48,5 @@ print(f"active claims count: {cur.fetchone()}[0]")
 #    print("  ", row)
 
 
-#cur.close()
-#conn.close()
+cur.close()
+conn.close()

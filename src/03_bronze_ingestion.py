@@ -1,6 +1,7 @@
 # Bronze is not an overwrit. Each run reads the current source snapshot and MERGEs it into Delta on the primary key, 
 # so inserts, updates, and soft-deletes are all reflected without destorying history.
 # This is the same Delta operation a Debezium sink would use; only the change transport differs.
+# Snapshot-read source, MERGE into Delta Bronze
 
 import os
 from pathlib import Path

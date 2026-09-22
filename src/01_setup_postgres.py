@@ -1,3 +1,4 @@
+# Create schema, seed 100 policies + 150 claims
 import psycopg2
 import random
 
@@ -19,9 +20,9 @@ cur.execute("""
         customer_id VARCHAR(50) NOT NULL,
         status VARCHAR(20) NOT NULL,
         premium NUMERIC(10, 2) NOT NULL CHECK (premium >= 0 ),
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         is_deleted BOOLEAN DEFAULT FALSE,
-        deleted_at TIMESTAMP
+        deleted_at TIMESTAMPTZ
     )
 """)
 
@@ -32,9 +33,9 @@ cur.execute("""
         customer_id VARCHAR(50) NOT NULL,
         claim_status VARCHAR(20) NOT NULL,
         amount NUMERIC(10, 2) NOT NULL CHECK (amount >= 0),
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         is_deleted BOOLEAN DEFAULT FALSE,
-        deleted_at TIMESTAMP 
+        deleted_at TIMESTAMPTZ 
     )
 """)
 
