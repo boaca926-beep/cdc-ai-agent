@@ -10,7 +10,7 @@ cur = conn.cursor()
 
 # Show timezone
 cur.execute("SHOW timezone")
-print(f"session timezon: {cur.fetchone()[0]}")
+print(f"session timezone: {cur.fetchone()[0]}")
 
 cur.execute("SELECT NOW(), NOW() AT TIME ZONE 'Europe/Stockholm'")
 now_utc, now_local = cur.fetchone()
@@ -37,15 +37,16 @@ print(f"active claims count: {cur.fetchone()[0]}")
 #cur.execute("SELECT COUNT(*) FROM claims;")
 #print("claims rows:", cur.fetchone()[0])
 
-cur.execute("SELECT * FROM policy ORDER BY policy_id LIMIT 5;")
-print("First 5 policies:")
+cur.execute("SELECT * FROM policy ORDER BY policy_id LIMIT 11;")
+print("First 11 policies:")
 for row in cur.fetchall():
     print("  ", row)
 
 #cur.execute("SELECT * FROM claims ORDER BY policy_id LIMIT 5;")
-#print("First 5 claims:")
-#for row in cur.fetchall():
-#    print("  ", row)
+cur.execute("SELECT * FROM claims ORDER BY claim_id LIMIT 11;")
+print("First 11 claims:")
+for row in cur.fetchall():
+    print("  ", row)
 
 
 cur.close()

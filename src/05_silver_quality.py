@@ -1,0 +1,24 @@
+import os
+from pathlib import Path
+from pyspark.sql import SparkSession
+from delta import configure_spark_with_delta_pip
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent # back to ai-agent-context-pipeline folder
+print(PROJECT_ROOT)
+JDBC_JAR = str(PROJECT_ROOT / "jars" / "postgresql-42.7.4.jar") # location where the .jar file is stored
+print(JDBC_JAR)
+JDBC_URL = "jdbc:postgresql://localhost:5432/insurance_db" # JDBC url
+
+# Build spark
+def build_spark():
+    builder = (SparkSession.builder
+               .appName("Insurance-CDC-Pipeline")
+               .master("local[*]") # tells Spark to run in local mode using all available CPU cores on the machine
+               .config("spark.jars", JDBC_JAR)
+               .config("spark.sql.extensions",
+                       "io.delta.sql.DeltaSparkSessionExtension")
+               .config("spark.sql.catalog.spark_catalog",
+                       "org.apache.spark.sql.delta.catalog.DeltaCatalog"))
+    return configure_spark_with_delta_pip(builder).getOrCreate()
+
+spark = build_spark()
