@@ -39,7 +39,6 @@ def read_from_postgres(table_name):
             .option("password", "insurance_pw")
             .option("driver", "org.postgresql.Driver") # class name from the jars/*.jar file
             .load())
-    pass
 
 def upsert_to_bronze(df, path, key):
     """MERGE a source snapshot into Bronze keyed by primary key."""
