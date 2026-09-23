@@ -22,3 +22,6 @@ def build_spark():
     return configure_spark_with_delta_pip(builder).getOrCreate()
 
 spark = build_spark()
+
+def read_bronze(table):
+    return spark.read.format("delta")
