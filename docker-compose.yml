@@ -1,18 +1,18 @@
-#base-no GPU bits
+# base — no GPU bits
 services:
   postgres-source:
     image: postgres:16-alpine
     container_name: insurance-source-db
     environment:
-      POSTGRES_USER: insurance_user
-      POSTGRES_PASSWORD: insurance_pw
-      POSTGRES_DB: insurance_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     command: >
       postgres -c wal_level=logical
                -c max_wal_senders=4
                -c max_replication_slots=4
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -20,9 +20,27 @@ services:
     image: ollama/ollama:latest
     container_name: ollama-llm
     ports:
-      - "11434:11434"
+      - "${OLLAMA_PORT}:11434"
     volumes:
       - ollama_data:/root/.ollama
+
+  api:
+    build: .
+    container_name: bronze-api
+    ports:
+      - "${API_PORT}:8080"
+    environment:
+      - OLLAMA_HOST=${OLLAMA_HOST}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - LOG_LEVEL=${LOG_LEVEL}
+    depends_on:
+      - postgres-source
+      - ollama
+    restart: unless-stopped
 
 volumes:
   pgdata:

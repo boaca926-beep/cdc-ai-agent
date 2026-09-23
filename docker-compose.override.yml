@@ -1,0 +1,6 @@
+services:
+  api:
+    volumes:
+      - ./data:/app/data
+      - ./api:/app/api
+    command: uv run --no-sync uvicorn api.main:app --host 0.0.0.0 --port 8080 --reload

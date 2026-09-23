@@ -7,4 +7,46 @@ wheels/
 *.egg-info
 
 # Virtual environments
-.venv
+.venv/
+venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# uv
+.uv/
+uv.lock.bak
+
+# Data (Bronze/Silver/Gold/Quarantine are regenerated; don't commit)
+data/silver/
+data/gold/
+data/quarantine/
+# Uncomment if you don't want to commit Bronze either:
+# data/bronze_test/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test / type-check / lint caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+logs/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Docker overrides (if machine-specific)
+# docker-compose.override.yml
