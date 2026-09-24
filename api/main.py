@@ -19,22 +19,44 @@ def read_bronze(table: str):
     return DeltaTable(str(path)).to_pandas()
     
 
-#@app.get("/health")
-#def health():
-#    pass
+# Azure Container Apps (and Kubernetes, and most container platforms) periodically sends an HTTP request to decide whether your container is healthy.
+@app.get("/health")
+def health():
+    """Liveness probe. Used by Azure Container Apps."""
+    return {"status": "ok"}
 
-#@app.get("/bronze/status")
-#def status():
-#    pass
+@app.get("/bronze/status")
+def status():
+    """Row counts for each Bronze table."""
+    out = {}
+    for table in ("policy", "claims"):
+        try:
+            df = read_bronze(table)
+            out[table] ={
+                "rows": int(len(df)),
+                "active": int((~df["is_deleted"]).sum())
+                # flips boolean, means "NOT deleted"
+                if "is_deleted" in df.columns
+                else int(len(df)),
+            }
+        except HTTPException:
+            out[table] = {"rows": 0, "active": 0}
+    return out
 
 @app.get("/bronze/policy/{policy_id}")
 def get_policy(policy_id: str):
     df = read_bronze("policy")
-    return
+    row = df[df["policy_id"] == policy_id]
+    if row.empty:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    return row.iloc[0].to_dict()
     
 
 @app.get("/bronze/claims/{claim_id}")
 def get_claims(claim_id: str):
     df = read_bronze("claims")
-    return
+    row = df[df["claim_id"] == claim_id]
+    if row.empty:
+        raise HTTPException(status_code=404, detail="Claim not found")
+    return row.iloc[0].to_dict()
     
