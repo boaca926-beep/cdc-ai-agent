@@ -1,3 +1,5 @@
+# > make up-gpu
+
 up-gpu:
 	docker compose -f docker-compose.yml -f docker-compose.override.yml \
 	               -f docker-compose.gpu.yml up -d
@@ -15,6 +17,10 @@ ps:
 logs:
 	docker compose logs -f
 
-rebuild:
+rebuild-gpu:
 	docker compose -f docker-compose.yml -f docker-compose.override.yml \
                    -f docker-compose.gpu.yml up -d --build
+
+rebuild-cpu:
+	docker compose -f docker-compose.yml -f docker-compose.override.yml \
+                   -f docker-compose.cpu.yml up -d --build
