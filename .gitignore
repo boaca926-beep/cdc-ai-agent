@@ -25,7 +25,7 @@ data/silver/
 data/gold/
 data/quarantine/
 # Uncomment if you don't want to commit Bronze either:
-# data/bronze_test/
+data/bronze/
 
 # Jupyter
 .ipynb_checkpoints/

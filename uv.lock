@@ -17,6 +17,7 @@ dependencies = [
     { name = "psycopg2-binary" },
     { name = "pyarrow" },
     { name = "pyspark" },
+    { name = "python-dotenv" },
     { name = "python-slugify" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -33,6 +34,7 @@ requires-dist = [
     { name = "psycopg2-binary", specifier = ">=2.9.13" },
     { name = "pyarrow", specifier = "==18.0.0" },
     { name = "pyspark", specifier = "==4.0.0" },
+    { name = "python-dotenv", specifier = ">=1.2.3" },
     { name = "python-slugify", specifier = ">=9.1.1" },
     { name = "uvicorn", extras = ["standard"], specifier = "==0.32.0" },
 ]
