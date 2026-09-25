@@ -1,7 +1,7 @@
 [project]
 name = "ai-agent-context-pipeline"
 version = "0.1.0"
-=======
+requires-python = ">=3.11"
 
 dependencies = [
     "fastapi==0.115.0",
@@ -10,16 +10,14 @@ dependencies = [
     "pandas==2.2.3",
     "pyarrow==18.0.0",
     "python-slugify>=9.1.1",
->>>>>>> c71ff044957e062169a67a8085330f1a53659a1e
     "python-dotenv>=1.2.3",
 ]
 
 [dependency-groups]
-=======
+
 pipeline = [
     "delta-spark==4.0.0",
     "duckdb>=1.5.5",
     "psycopg2-binary>=2.9.13",
     "pyspark==4.0.0",
 ]
->>>>>>> c71ff044957e062169a67a8085330f1a53659a1e
