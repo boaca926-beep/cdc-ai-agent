@@ -4,13 +4,27 @@ set -e
 export OLLAMA_MODEL="${OLLAMA_MODEL:-qwen3:8b}"
 
 echo "=== Step 1: Starting infrastructure ==="
-docker compose up -d
+if command -v nvidia-smi &>/dev/null && nvidia-smi &>/dev/null; then
+    echo "GPU detected — starting with GPU override"
+    docker compose -f docker-compose.yml -f docker-compose.override.yml \
+                   -f docker-compose.gpu.yml up -d
+else
+    echo "No GPU — starting with CPU override"
+    docker compose -f docker-compose.yml -f docker-compose.override.yml \
+                   -f docker-compose.cpu.yml up -d
+fi
 sleep 5
 
 echo "=== Step 2: Checking Ollama model ==="
-docker exec ollama-llm ollama list | awk '{print $1}' \
-    | grep -qx "${OLLAMA_MODEL}" \
-    || docker exec ollama-llm ollama pull "${OLLAMA_MODEL}"
+# tail -n + 2: prints start at line 2, go to the end
+# awk splits
+# -qx quiet and exact match
+if docker exec ollama-llm ollama list | tail -n +2 | awk '{print $1}' | grep -qx "${OLLAMA_MODEL}"; then
+    echo "Model ${OLLAMA_MODEL} already present"
+else
+    echo "Pulling ${OLLAMA_MODEL}..."
+    docker exec ollama-llm ollama pull "${OLLAMA_MODEL}"
+fi
 
 echo "=== Step 3: Running pipeline ==="
 #uv run python src/01_setup_postgres.py
