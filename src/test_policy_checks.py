@@ -1,6 +1,6 @@
 # Test the flag with synthetic data
 import os
-os.environ["SPARK_LOCAL_IP"] = "172.20.23.187"
+os.environ.setdefault("SPARK_LOCAL_IP", "127.0.0.1")
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -11,7 +11,8 @@ spark = SparkSession.builder.master("local[*]").getOrCreate()
 def split_and_persist(df):
     """Split into clean and quarantined, persisting both."""
     bad = df.filter(F.col("quality_flag").isNotNull())
-    return bad
+    good = df.filter(F.col("quality_flag").isNull()).drop("quality_flag")
+    return good, bad
 
 policy = spark.createDataFrame([
     ("P0001", "active", 100.0), # ok
@@ -46,7 +47,8 @@ p = p.withColumn(
 
 print(policy)
 p.show(truncate=False) # show all cell contents
-bad = split_and_persist(p)
+good, bad = split_and_persist(p)
 #print(f"{type(p)}")
 bad.show(truncate=False)
+good.show(truncate=False)
 spark.stop()
