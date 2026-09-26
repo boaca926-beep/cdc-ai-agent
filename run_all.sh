@@ -27,12 +27,12 @@ else
 fi
 
 echo "=== Step 3: Running pipeline ==="
-#uv run python src/01_setup_postgres.py
-#uv run python src/02_verify_source.py
-#uv run python src/03_bronze_ingestion.py
-#uv run python src/04_cdc_simulation.py
-#uv run python src/03_bronze_ingestion.py
-#uv run python src/05_silver_quality.py
+uv run python src/01_setup_postgres.py
+uv run python src/02_verify_source.py
+uv run python src/03_bronze_ingestion.py
+uv run python src/04_cdc_simulation.py
+uv run python src/03_bronze_ingestion.py
+uv run python src/05_silver_quality.py
 #uv run python src/06_serving_layer.py
 #uv run python src/07_feature_engineering.py
 #uv run python src/08_agent_llm.py
