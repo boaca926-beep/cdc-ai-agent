@@ -1,3 +1,11 @@
+# Silver applies five rules: null primary key, invalid status, negative amount,
+# orphan policy reference, and stale open claim. Rows failing any rule are written
+# to data/quarantine/ rather than silently dropped, so a data engineer can inspect them. 
+# The staleness rule reads its cutoff from Postgres instead of Python's datetime.now().
+# Than keeps the comparision in a single clock domain and avoids the timezone drift 
+# you get when the driver returns timestamps in the session's local zone while Python
+# supplies a naive timestamp
+
 from pathlib import Path
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
