@@ -18,7 +18,7 @@ import os
 from pathlib import Path
 import duckdb
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent # back to ai-agent-context-pipeline folder
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent # back to ai-agent-context-pipeline folder
 #print(PROJECT_ROOT)
 
 DATALAKE = str(PROJECT_ROOT / "data" / "bronze") # location where the .jar file is stored
@@ -34,6 +34,6 @@ DATALAKE_SILVER = str(PROJECT_ROOT / "data" / "silver") # location where the .ja
 duckdb.sql("INSTALL delta; LOAD delta;")
 
 #print(duckdb.sql(f"SELECT * FROM delta_scan('{DATALAKE}/policy') LIMIT 11").df())
-#print(duckdb.sql(f"SELECT * FROM delta_scan('{DATALAKE}/claims') LIMIT 11").df())
+print(duckdb.sql(f"SELECT * FROM delta_scan('{DATALAKE}/claims') LIMIT 11").df())
 #print(duckdb.sql(f"SELECT * FROM delta_scan('{QUARANTINE}/policy') LIMIT 11").df())
-print(duckdb.sql(f"SELECT * FROM delta_scan('{DATALAKE_SILVER}/policy_clean') LIMIT 11").df())
+#print(duckdb.sql(f"SELECT * FROM delta_scan('{DATALAKE_SILVER}/policy_clean') LIMIT 11").df())
