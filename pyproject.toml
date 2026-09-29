@@ -11,7 +11,6 @@ dependencies = [
     "pyarrow==18.0.0",
     "python-slugify>=9.1.1",
     "python-dotenv>=1.2.3",
-    "delta-spark>=4.0.0",
 ]
 
 [dependency-groups]
@@ -22,3 +21,11 @@ pipeline = [
     "psycopg2-binary>=2.9.13",
     "pyspark==4.0.0",
 ]
+
+# Tell uv to install the pipeline group by default
+# refresh the lock "uv lock", since we edited pyproject.toml by hand
+# pyproject.toml  →  uv lock  →  uv.lock  →  uv sync  →  .venv
+#   (intent)         (resolve)  (plan)      (install)   (reality)
+
+[tool.uv]
+default-groups = ["pipeline"]
